@@ -1,0 +1,44 @@
+# Local cluster for NothingEats: `just cluster-up`
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: nothingeats
+servers: 1
+agents: 0
+image: rancher/k3s:v1.36.5-k3s1
+
+ports:
+  # Gateway (Traefik, installed by Flux) via the k3d load balancer
+  - port: 80:80
+    nodeFilters: [loadbalancer]
+  - port: 443:443
+    nodeFilters: [loadbalancer]
+  # Infra exposed as NodePorts so tests and a single service can run on the host.
+  # Host ports use a 1xxxx range so NothingEats runs next to other local stacks.
+  # The matching NodePort services are defined in nothingeats-gitops.
+  - port: 15432:30432 # Postgres (CloudNativePG)
+    nodeFilters: [server:0]
+  - port: 19094:30094 # Kafka external listener (Strimzi)
+    nodeFilters: [server:0]
+  - port: 19200:30200 # Elasticsearch (ECK)
+    nodeFilters: [server:0]
+  - port: 16379:30379 # Valkey
+    nodeFilters: [server:0]
+  - port: 11025:30025 # Mailpit SMTP
+    nodeFilters: [server:0]
+
+registries:
+  create:
+    name: registry.localhost
+    host: 0.0.0.0
+    hostPort: "5111"
+
+options:
+  k3s:
+    extraArgs:
+      # Traefik is installed and versioned by Flux (Gateway API enabled), not by k3s.
+      - arg: --disable=traefik
+        nodeFilters: [server:*]
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true

@@ -1,0 +1,26 @@
+# All NothingEats repos under github.com/slashncode, cloned side by side by `just clone`.
+
+# platform
+nothingeats
+nothingeats-ci
+nothingeats-kotlin-platform
+nothingeats-kotlin-service-template
+nothingeats-charts
+nothingeats-gitops
+nothingeats-e2e
+
+# backend services
+nothingeats-identity-service
+nothingeats-catalog-service
+nothingeats-search-service
+nothingeats-ordering-service
+nothingeats-delivery-service
+nothingeats-loyalty-service
+nothingeats-social-service
+nothingeats-notification-service
+nothingeats-assistant-service
+
+# frontend
+nothingeats-ui
+nothingeats-web
+nothingeats-backoffice
