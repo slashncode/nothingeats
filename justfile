@@ -92,6 +92,17 @@ flux-bootstrap:
 flux-status:
     flux --context={{ context }} get all -A --status-selector ready=false
 
+# Inner loop for one service (e.g. catalog-service): Flux steps aside, Tilt rebuilds and redeploys on change
+dev service:
+    flux --context={{ context }} suspend helmrelease {{ service }} -n nothingeats
+    cd "{{ workspace }}/nothingeats-{{ service }}" && tilt up --context {{ context }} --namespace nothingeats
+
+# Hand a service back to Flux after `just dev`
+dev-stop service:
+    cd "{{ workspace }}/nothingeats-{{ service }}" && tilt down --context {{ context }} --namespace nothingeats
+    flux --context={{ context }} resume helmrelease {{ service }} -n nothingeats
+    flux --context={{ context }} reconcile helmrelease {{ service }} -n nothingeats --force
+
 # Cluster, SOPS key and Flux in one go
 up: cluster-up sops-key flux-bootstrap
 
