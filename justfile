@@ -108,3 +108,14 @@ up: cluster-up sops-key flux-bootstrap
 
 # Tear everything down
 down: cluster-down
+
+# Vendor soren-ui at a pushed commit into nothingeats-ui and verify it; review and commit the result there
+sync-soren-ui ref="main":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd "{{ workspace }}/nothingeats-ui"
+    pnpm sync:soren-ui --ref "{{ ref }}"
+    pnpm check:soren-ui
+    pnpm typecheck
+    pnpm test
+    git status --short -- src/soren src/soren-ui.ts SOREN_UI.md
