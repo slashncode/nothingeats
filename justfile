@@ -9,11 +9,22 @@ default:
     @just --list
 
 # Install the pinned toolchain from mise.toml
-tools:
+tools: link-toolchain
     mise install
 
+# Link mise.toml into the workspace root so every sibling repo gets the same toolchain
+link-toolchain:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    link="{{ workspace }}/mise.toml"
+    if [[ ! -e "$link" ]]; then
+        ln -s "{{ justfile_directory() }}/mise.toml" "$link"
+        echo "linked $link"
+    fi
+    mise trust --quiet "$link"
+
 # Clone every repo from repos.txt next to this one (existing folders are skipped)
-clone:
+clone: link-toolchain
     #!/usr/bin/env bash
     set -euo pipefail
     grep -vE '^\s*(#|$)' repos.txt | while read -r repo; do
