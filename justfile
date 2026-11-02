@@ -109,6 +109,10 @@ up: cluster-up sops-key flux-bootstrap
 # Tear everything down
 down: cluster-down
 
+# The shop on the current Wi-Fi over HTTPS (port 8443), for testing PWA install and push on a phone
+lan:
+    "{{ workspace }}/nothingeats/scripts/lan.sh"
+
 # Vendor soren-ui at a pushed commit into nothingeats-ui and verify it; review and commit the result there
 sync-soren-ui ref="main":
     #!/usr/bin/env bash

@@ -17,6 +17,7 @@ sops = "3.13.3"
 age = "1.3.2"
 kubeconform = "0.8.0"
 yq = "4.54.1"
+caddy = "2.11.7"      # `just lan`: HTTPS on the Wi-Fi for phones
 
 [env]
 # Private key that decrypts the SOPS secrets in nothingeats-gitops. Back it up; it is not in any repo.

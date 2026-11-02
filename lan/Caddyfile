@@ -1,0 +1,28 @@
+# The local shop on the Wi-Fi, for phones (`just lan`). Phones need HTTPS for service workers,
+# PWA install and web push, so this terminates TLS with a certificate from the LAN CA and hands
+# everything to the cluster's gateway as nothingeats.localhost.
+{
+	auto_https off
+	admin off
+	default_sni {$LAN_NAME}
+}
+
+# Plain HTTP serves only the CA certificate, for the phone to install; everything else goes to HTTPS.
+http://:{$LAN_HTTP_PORT} {
+	handle /nothingeats-lan-ca.crt {
+		root * {$LAN_DIR}
+		rewrite * /ca.crt
+		header Content-Type application/x-x509-ca-cert
+		file_server
+	}
+	handle {
+		redir https://{$LAN_IP}:{$LAN_HTTPS_PORT}{uri}
+	}
+}
+
+https://{$LAN_IP}:{$LAN_HTTPS_PORT}, https://{$LAN_NAME}:{$LAN_HTTPS_PORT} {
+	tls {$LAN_DIR}/server.crt {$LAN_DIR}/server.key
+	reverse_proxy 127.0.0.1:80 {
+		header_up Host nothingeats.localhost
+	}
+}

@@ -97,7 +97,11 @@ just up               # k3d cluster + Flux bootstrap (needs GITHUB_TOKEN)
 | URL | What |
 |---|---|
 | http://nothingeats.localhost | Customer app |
-| http://admin.nothingeats.localhost | Backoffice |
+| http://nothingeats.localhost/admin | Backoffice |
 | http://mail.nothingeats.localhost | Mailpit (all outgoing mail) |
 
 Other recipes: `just --list`.
+
+### On a phone
+
+`just lan` serves the shop on the current Wi-Fi over HTTPS (`https://<this Mac's address>:8443`), so a phone can install it and receive web push; both need a secure context. It creates a small CA in `~/.config/nothingeats/lan` (name constrained to private addresses and this Mac's `.local` name, so it cannot vouch for anything else) and prints how to install it on an iPhone or Android phone. Anyone on the Wi-Fi reaches the shop while it runs. The cluster's own ports are bound to `127.0.0.1` (`k3d/cluster.yaml`), so only this proxy is visible on the network.
