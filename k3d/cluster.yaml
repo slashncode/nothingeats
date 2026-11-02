@@ -32,7 +32,8 @@ ports:
 registries:
   create:
     name: registry.localhost
-    host: 0.0.0.0
+    # Tilt pushes from this Mac only; the cluster pulls through Docker's network, not this port.
+    host: 127.0.0.1
     hostPort: "5111"
 
 options:
