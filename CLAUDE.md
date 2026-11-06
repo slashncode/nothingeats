@@ -14,6 +14,7 @@ The cross-repo plan and session rules live in the workspace root one level up (`
 - `just flux-bootstrap` — bootstrap Flux from `nothingeats-gitops` (`clusters/local`), needs `GITHUB_TOKEN`
 - `just up` / `just down` — cluster + Flux in one go
 - `just dev <service>` / `just dev-stop <service>` — Tilt inner loop for one service (Flux suspended meanwhile)
+- `just e2e` — system tests from `nothingeats-e2e` against the local cluster (Playwright, k6 smoke)
 
 ## Conventions
 

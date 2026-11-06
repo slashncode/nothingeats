@@ -109,6 +109,10 @@ up: cluster-up sops-key flux-bootstrap
 # Tear everything down
 down: cluster-down
 
+# System tests from nothingeats-e2e against the local cluster: Playwright, then the k6 smoke run
+e2e:
+    cd "{{ workspace }}/nothingeats-e2e" && mise exec -- pnpm test && mise exec -- pnpm smoke
+
 # The shop on the current Wi-Fi over HTTPS (port 8443), for testing PWA install and push on a phone
 lan:
     "{{ workspace }}/nothingeats/scripts/lan.sh"
