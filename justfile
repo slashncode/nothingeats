@@ -103,6 +103,11 @@ dev-stop service:
     flux --context={{ context }} resume helmrelease {{ service }} -n nothingeats
     flux --context={{ context }} reconcile helmrelease {{ service }} -n nothingeats --force
 
+# The login for Kafka's listener for the host (localhost:19094), as exports: eval "$(just kafka-env)"
+kafka-env:
+    @echo "export KAFKA__SASL__USERNAME=developer"
+    @echo "export KAFKA__SASL__PASSWORD=$(kubectl --context {{ context }} -n nothingeats get secret developer -o jsonpath='{.data.password}' | base64 -d)"
+
 # Cluster, SOPS key and Flux in one go
 up: cluster-up sops-key flux-bootstrap
 
